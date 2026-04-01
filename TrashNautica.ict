@@ -91,7 +91,7 @@ assets:
               isUi: false
           - type: template
             baseClass: AnimatedSprite
-            name: TerrenoSlope135
+            name: TerrenoSlope
             depth: 0
             texture: RNg3z4D9jFcMfq
             playAnimationOnStart: false
@@ -104,8 +104,8 @@ assets:
                 arguments: {}
                 lib: core
             extends:
-              cgroup: Slope
-            lastmod: 1774856451811
+              cgroup: Terreno
+            lastmod: 1775028280902
             uid: PpWKzd5kQ43d69
             behaviors: []
             extendTypes: ''
@@ -120,7 +120,7 @@ assets:
             baseClass: AnimatedSprite
             name: Giocatore
             depth: 0
-            texture: DrBRTqbRzwT23J
+            texture: R534r55TFdrtrj
             playAnimationOnStart: false
             loopAnimation: true
             animationFPS: 30
@@ -130,7 +130,7 @@ assets:
                 lib: core
                 code: |-
                   if (!pause.isPaused) {
-                      var maxSpeed = 120;
+                      var maxSpeed = 120 - 10 * this.spazzaturaGrande.length;
                       var friction = 0.05
                       if (this.hasCollidedWithEnemy) {
                           this.hspeed = !place.occupied(this, this.x + 10 * actions.P1MoveX.value, this.y, "Terreno") ? this.hspeed : -this.hspeed;
@@ -146,7 +146,7 @@ assets:
                           this.vspeed = !place.occupied(this, this.x, this.y + 10 * actions.P1MoveY.value, "Terreno") ? this.vspeed : 0;
                       }
 
-                      var offsetSpazzatura = 25;
+                      var offsetSpazzatura = 35;
 
                       for (let i = 0; i < this.spazzaturaGrande.length; i++) {
                           this.spazzaturaGrande[i].x = this.x;
@@ -199,11 +199,24 @@ assets:
                 code: |-
                   this.hasCollidedWithEnemy = false;
                   this.spazzaturaGrande = [];
+                  if (!window.scoreP1) window.scoreP1 = 0;
                 arguments: {}
                 lib: core
+              - eventKey: collisionTemplate
+                code: |-
+                  if (this.spazzaturaGrande.length > 0) {
+
+                      window.scoreP1 += 100 * this.spazzaturaGrande.length;
+                      for (let i of this.spazzaturaGrande) i.kill = true;
+
+                      this.spazzaturaGrande = [];
+                  }
+                arguments:
+                  template: w2cpWbbRcqhr4F
+                lib: place
             extends:
               cgroup: Giocatore
-            lastmod: 1774441348482
+            lastmod: 1775031402635
             uid: DL9BczP5Cd4RMz
             behaviors: []
             extendTypes: ''
@@ -506,6 +519,34 @@ assets:
             padding: 1
             isBlank: false
             source: 'C:\Users\nekosnugz\Downloads\New Piskel-1.png.png'
+          - lastmod: 1775031068244
+            type: texture
+            name: Giocatore_alt
+            untill: 0
+            grid:
+              - 1
+              - 1
+            axis:
+              - 32
+              - 32
+            marginx: 0
+            marginy: 0
+            imgWidth: 64
+            imgHeight: 64
+            width: 64
+            height: 64
+            offx: 0
+            offy: 0
+            origname: iR534r55TFdrtrj.png
+            shape: circle
+            left: 32
+            right: 32
+            top: 32
+            bottom: 32
+            uid: R534r55TFdrtrj
+            padding: 1
+            isBlank: false
+            r: 28
       - type: folder
         uid: r75phJ99KmB7KH
         colorClass: accent1
@@ -932,10 +973,14 @@ assets:
             loopAnimation: true
             animationFPS: 30
             visible: true
-            events: []
+            events:
+              - eventKey: OnStep
+                code: 'this.text = "Giocatore 1: " + window.scoreP1 + " punti";'
+                arguments: {}
+                lib: core
             extends:
               cgroup: ''
-            lastmod: 1774855609872
+            lastmod: 1775027582189
             uid: TPkR7Gqr26Q4hp
             behaviors: []
             extendTypes: ''
@@ -976,6 +1021,23 @@ assets:
               - allInFont
             customCharset: ''
             uid: Mgnqd1f2tCk2r5
+          - type: template
+            baseClass: Text
+            name: Timer
+            depth: 0
+            texture: -1
+            playAnimationOnStart: false
+            loopAnimation: true
+            animationFPS: 30
+            visible: true
+            events: []
+            extends: {}
+            lastmod: 1775030791703
+            uid: r6g7J6J9TntC1H
+            behaviors: []
+            extendTypes: ''
+            defaultText: ''
+            textStyle: CmM2gPcw8mNdTQ
   - type: folder
     uid: b9RMdjDDgP9Hg8
     colorClass: warning
@@ -1521,8 +1583,8 @@ assets:
             exts: *ref_4
             customProperties: {}
             bindings: {}
-          - x: 240
-            'y': 640
+          - x: 64
+            'y': 720
             opacity: 1
             tint: 16777215
             scale:
@@ -1533,8 +1595,8 @@ assets:
             exts: {}
             customProperties: {}
             bindings: {}
-          - x: 592
-            'y': 624
+          - x: 128
+            'y': 720
             opacity: 1
             tint: 16777215
             scale:
@@ -1545,8 +1607,8 @@ assets:
             exts: {}
             customProperties: {}
             bindings: {}
-          - x: 1008
-            'y': 400
+          - x: 192
+            'y': 720
             opacity: 1
             tint: 16777215
             scale:
@@ -1557,8 +1619,8 @@ assets:
             exts: {}
             customProperties: {}
             bindings: {}
-          - x: 1136
-            'y': 576
+          - x: 256
+            'y': 720
             opacity: 1
             tint: 16777215
             scale:
@@ -1569,8 +1631,8 @@ assets:
             exts: {}
             customProperties: {}
             bindings: {}
-          - x: 48
-            'y': 336
+          - x: 0
+            'y': 720
             opacity: 1
             tint: 16777215
             scale:
@@ -1579,24 +1641,221 @@ assets:
             rotation: 0
             uid: F5fWzk4DBQT5Cd
             exts: {}
+            customProperties: {}
+            bindings: {}
+          - x: 384
+            'y': 720
+            opacity: 1
+            tint: 16777215
+            scale:
+              x: 1
+              'y': 1
+            rotation: 0
+            uid: F5fWzk4DBQT5Cd
+            exts: &ref_5 {}
+            customProperties: {}
+            bindings: {}
+          - x: 448
+            'y': 720
+            opacity: 1
+            tint: 16777215
+            scale:
+              x: 1
+              'y': 1
+            rotation: 0
+            uid: F5fWzk4DBQT5Cd
+            exts: &ref_6 {}
+            customProperties: {}
+            bindings: {}
+          - x: 512
+            'y': 720
+            opacity: 1
+            tint: 16777215
+            scale:
+              x: 1
+              'y': 1
+            rotation: 0
+            uid: F5fWzk4DBQT5Cd
+            exts: &ref_7 {}
+            customProperties: {}
+            bindings: {}
+          - x: 576
+            'y': 720
+            opacity: 1
+            tint: 16777215
+            scale:
+              x: 1
+              'y': 1
+            rotation: 0
+            uid: F5fWzk4DBQT5Cd
+            exts: &ref_8 {}
+            customProperties: {}
+            bindings: {}
+          - x: 320
+            'y': 720
+            opacity: 1
+            tint: 16777215
+            scale:
+              x: 1
+              'y': 1
+            rotation: 0
+            uid: F5fWzk4DBQT5Cd
+            exts: &ref_9 {}
+            customProperties: {}
+            bindings: {}
+          - x: 704
+            'y': 720
+            opacity: 1
+            tint: 16777215
+            scale:
+              x: 1
+              'y': 1
+            rotation: 0
+            uid: F5fWzk4DBQT5Cd
+            exts: *ref_5
+            customProperties: {}
+            bindings: {}
+          - x: 768
+            'y': 720
+            opacity: 1
+            tint: 16777215
+            scale:
+              x: 1
+              'y': 1
+            rotation: 0
+            uid: F5fWzk4DBQT5Cd
+            exts: *ref_6
+            customProperties: {}
+            bindings: {}
+          - x: 832
+            'y': 720
+            opacity: 1
+            tint: 16777215
+            scale:
+              x: 1
+              'y': 1
+            rotation: 0
+            uid: F5fWzk4DBQT5Cd
+            exts: *ref_7
+            customProperties: {}
+            bindings: {}
+          - x: 896
+            'y': 720
+            opacity: 1
+            tint: 16777215
+            scale:
+              x: 1
+              'y': 1
+            rotation: 0
+            uid: F5fWzk4DBQT5Cd
+            exts: *ref_8
+            customProperties: {}
+            bindings: {}
+          - x: 640
+            'y': 720
+            opacity: 1
+            tint: 16777215
+            scale:
+              x: 1
+              'y': 1
+            rotation: 0
+            uid: F5fWzk4DBQT5Cd
+            exts: *ref_9
+            customProperties: {}
+            bindings: {}
+          - x: 1024
+            'y': 720
+            opacity: 1
+            tint: 16777215
+            scale:
+              x: 1
+              'y': 1
+            rotation: 0
+            uid: F5fWzk4DBQT5Cd
+            exts: *ref_5
+            customProperties: {}
+            bindings: {}
+          - x: 1088
+            'y': 720
+            opacity: 1
+            tint: 16777215
+            scale:
+              x: 1
+              'y': 1
+            rotation: 0
+            uid: F5fWzk4DBQT5Cd
+            exts: *ref_6
+            customProperties: {}
+            bindings: {}
+          - x: 1152
+            'y': 720
+            opacity: 1
+            tint: 16777215
+            scale:
+              x: 1
+              'y': 1
+            rotation: 0
+            uid: F5fWzk4DBQT5Cd
+            exts: *ref_7
+            customProperties: {}
+            bindings: {}
+          - x: 1216
+            'y': 720
+            opacity: 1
+            tint: 16777215
+            scale:
+              x: 1
+              'y': 1
+            rotation: 0
+            uid: F5fWzk4DBQT5Cd
+            exts: *ref_8
+            customProperties: {}
+            bindings: {}
+          - x: 960
+            'y': 720
+            opacity: 1
+            tint: 16777215
+            scale:
+              x: 1
+              'y': 1
+            rotation: 0
+            uid: F5fWzk4DBQT5Cd
+            exts: *ref_9
+            customProperties: {}
+            bindings: {}
+          - x: 1280
+            'y': 720
+            opacity: 1
+            tint: 16777215
+            scale:
+              x: 1
+              'y': 1
+            rotation: 0
+            uid: F5fWzk4DBQT5Cd
+            exts: &ref_10 {}
+            customProperties: {}
+            bindings: {}
+          - x: -64
+            'y': 720
+            opacity: 1
+            tint: 16777215
+            scale:
+              x: 1
+              'y': 1
+            rotation: 0
+            uid: F5fWzk4DBQT5Cd
+            exts: *ref_10
             customProperties: {}
             bindings: {}
         tiles: []
         extends: {}
-        lastmod: 1774857317971
+        lastmod: 1775032193037
         events:
           - eventKey: OnRoomStart
-            code: |
+            code: |-
               rooms.append('UI', {
                   isUI: true
               });
-
-              pause.togglePaused();
-              console.log("Pronti...")
-              setTimeout(() => {
-                  pause.togglePaused();
-                  console.log("Via!")
-              }, 3000);
 
               let scoreP1 = 0;
               let scoreP2 = 0;
@@ -1654,21 +1913,21 @@ assets:
             exts: {}
             customProperties: {}
             bindings: {}
-          - x: 1088
-            'y': 16
+          - x: 352
+            'y': 32
             opacity: 1
             tint: 16777215
             scale:
               x: 1
               'y': 1
             rotation: 0
-            uid: TPkR7Gqr26Q4hp
+            uid: r6g7J6J9TntC1H
             exts: {}
             customProperties: {}
             bindings: {}
         tiles: []
         extends: {}
-        lastmod: 1774858202778
+        lastmod: 1775030647833
         events:
           - eventKey: OnRoomStart
             code: ''
@@ -1755,7 +2014,7 @@ assets:
 globalVars: []
 settings:
   authoring:
-    author: ''
+    author: 4G
     site: ''
     title: ThrashNautica
     version:
